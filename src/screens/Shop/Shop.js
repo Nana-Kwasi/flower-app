@@ -110,7 +110,6 @@ const ShopScreen = ({ navigation }) => {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -180,7 +179,7 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#CC6CE7',
+    color: '#3C4748',
   },
   productPrice: {
     fontSize: 16,
@@ -192,7 +191,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   addToCartButton: {
-    backgroundColor: '#CC6CE7',
+    backgroundColor: '#3C4748',
     borderRadius: 20,
     paddingVertical: 4,
     paddingHorizontal: 10,
