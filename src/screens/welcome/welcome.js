@@ -8,17 +8,17 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 const images = [
-  require('../../../assets/daniela-e-QA8nKvl_bso-unsplash.jpg'),
-  require('../../../assets/manel-sean-v9OOmheGCkc-unsplash.jpg'),
-  require('../../../assets/pexels-8moments-1353126.jpg'),
-  require('../../../assets/pexels-bestasya-11960776.jpg'),
-  require('../../../assets/pexels-valeriya-74512.jpg'),
-  require('../../../assets/pexels-shvetsa-3746197.jpg'),
-  require('../../../assets/pexels-secret-garden-333350-931176.jpg'),
-  require('../../../assets/pexels-shkrabaanthony-4612235.jpg'),
- require('../../../assets/pexels-marta-dzedyshko-1042863-2377470.jpg'),
- require('../../../assets/pexels-iriser-1420016.jpg'),
- require('../../../assets/pexels-jennifer-murray-402778-1067202.jpg'),
+  require('../../../assets/Muschel-Spaghetti in Tomatensugo.jpg'),
+  require('../../../assets/Old Fashioned Lemonade.jpg'),
+  require('../../../assets/White Balsamic Vinaigrette — Living Lou.jpg'),
+  require('../../../assets/Creamy Chocolate Martini.jpg'),
+  require('../../../assets/breakfast.jpg'),
+  require('../../../assets/Blue Lagoon Mocktail.jpg'),
+  require('../../../assets/40 Dinner Ideas for Tonight (+ Easy Recipes).jpg'),
+  require('../../../assets/7 Thanksgiving Dinner Ideas - Munchkin Time.jpg'),
+//  require('../../../assets/pexels-marta-dzedyshko-1042863-2377470.jpg'),
+//  require('../../../assets/pexels-iriser-1420016.jpg'),
+//  require('../../../assets/pexels-jennifer-murray-402778-1067202.jpg'),
 
 
 
@@ -51,7 +51,7 @@ const WelcomeScreen = () => {
         renderItem={renderItem}
       />
         <View style={styles.textContainer}>
-        <Text style={styles.welcomeText}>Model Flowers!</Text>
+        <Text style={styles.welcomeText}>We Serve your Favourite Food!</Text>
         <Text style={styles.welcomeText2}>All Right Reserved 2024</Text>
       </View>
       <TouchableOpacity 
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   welcomeText: {
     fontSize: 30,
-    color: 'yellow',
+    color: 'white',
     fontWeight: 'bold',
     marginBottom:290,
     marginHorizontal:50

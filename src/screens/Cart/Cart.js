@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, TextInput, Alert, ActivityIndicator, Modal } from 'react-native';
 import { useCart } from '../CartContext/CartContext';
 import * as Location from 'expo-location';
@@ -7,6 +7,13 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, getFirestore } from "firebase/firestore"; 
 import app from '../Authentication/Config/Config';
+import { useProfile } from '../ProfileContext/ProfileContext';
+import { useNavigation } from '@react-navigation/native';  // Import useNavigation
+
+
+
+
+
 
 const CartScreen = () => {
   const { cartItems, increaseQuantity, setCartItems } = useCart();
@@ -24,6 +31,9 @@ const CartScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState(''); 
   const [isSubmitting, setIsSubmitting] = useState(false); // State for submit button loading
   const [isCheckoutSubmitting, setIsCheckoutSubmitting] = useState(false); // State for checkout button loading
+  const { profile, updateProfile, addOrderToHistory } = useProfile(); // Use ProfileContext
+  const [deliveryDescription, setDeliveryDescription] = useState(''); // Replace promoCode with deliveryDescription
+  const navigation = useNavigation();  // Initialize navigation
 
 
   const validatePassword = () => {
@@ -93,6 +103,8 @@ const CartScreen = () => {
       setCartItems(updatedCartItems);
     }
   };
+
+  
   
   // Function to load cart items from AsyncStorage
   const loadCartItems = async () => {
@@ -124,6 +136,10 @@ const CartScreen = () => {
   useEffect(() => {
     saveCartItems(cartItems);
   }, [cartItems]);
+
+
+
+  
   const fetchLocation = useCallback(async () => {
     try {
       const { status } = await Location.requestForegroundPermissionsAsync();
@@ -228,7 +244,7 @@ const CartScreen = () => {
       <Image source={item.image} style={styles.cartItemImage} />
       <View style={styles.cartItemDetails}>
         <Text style={styles.cartItemName}>{item.name}</Text>
-        <Text style={styles.cartItemAttributes}>Size: {item.size}  Color: {item.color}</Text>
+        <Text style={styles.cartItemAttributes}> {item.size}  {item.color}</Text>
         <Text style={styles.cartItemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
         <View style={styles.quantityContainer}>
           <TouchableOpacity onPress={() => decreaseQuantity(item)} style={styles.quantityButton}>
@@ -259,10 +275,14 @@ const CartScreen = () => {
       Alert.alert('Invalid Promo', 'The promo code you entered is not valid.');
     }
   };
-  
+  const clearCart = () => {
+    setCartItems([]);
+    // Optionally, you can also clear other cart-related state variables if needed
+  };
 
   const handleCheckoutSubmit = async () => {
-    if (!username) {
+    if (!deliveryDescription.trim()) {  // Check if description is empty
+      Alert.alert('Missing Description', 'Please provide delivery instructions before proceeding to checkout.');
       setModalVisible(true);
       return;
     }
@@ -277,27 +297,37 @@ const CartScreen = () => {
         name: username,  // Use the loaded username
         email,           // Use the loaded email
         phoneNumber,     // Use the loaded phone number
-      }
+      },
+      deliveryDescription // Add delivery description to the data
+
     };
   
     try {
-      await setDoc(doc(db, "Checkouts", generateUniqueId()), cartData);
+      const checkoutDocRef = doc(db, "Checkouts", generateUniqueId());
+      await setDoc(checkoutDocRef, cartData);
       console.log('Checkout data successfully saved to Firebase:', cartData);
       Alert.alert('Checkout', 'Checkout data successfully saved.');
-      clearCart(); // Clear the cart data here
+  
+      // Update profile context with the new order
+      addOrderToHistory({
+        id: checkoutDocRef.id,
+        ...cartData,
+        location: locationName,
+
+      });
+      clearCart();
+      navigation.navigate('Tracking', { checkoutData: cartData });
     } catch (error) {
-      console.error('Error saving checkout data:', error.message);
-      Alert.alert('Checkout Error', 'There was an error processing your checkout. Please try again.');
+      console.error('Error saving checkout data: ', error);
+      Alert.alert('Error', 'There was an error saving the checkout data.');
     } finally {
       setIsCheckoutSubmitting(false);
     }
   };
   
   
-  const clearCart = () => {
-    setCartItems([]);
-    // Optionally, you can also clear other cart-related state variables if needed
-  };
+  
+ 
   
   // Function to load username from AsyncStorage
  const loadUserData = async () => {
@@ -321,7 +351,7 @@ useEffect(() => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>Cart</Text>
+        {/* <Text style={styles.headerText}></Text> */}
         <TouchableOpacity style={styles.profileIcon} onPress={() => setModalVisible(true)}>
           <Icon name="user" size={60} color="#000" />
           {username && <Text style={styles.usernameText}>{username}</Text>}
@@ -338,21 +368,14 @@ useEffect(() => {
             contentContainerStyle={styles.cartList}
           />
           <View style={styles.promoContainer}>
-            <TextInput
-              style={styles.promoInput}
-              placeholder="Enter Promo Code"
-              value={promoCode}
-              onChangeText={setPromoCode}
-              editable={!promoApplied}
-              placeholderTextColor={"black"}
-            />
-            <TouchableOpacity
-              style={[styles.promoButton, promoApplied && styles.promoButtonApplied]}
-              onPress={handleApplyPromo}
-              disabled={promoApplied}
-            >
-              <Text style={styles.promoButtonText}>{promoApplied ? 'Applied' : 'Apply'}</Text>
-            </TouchableOpacity>
+          <TextInput
+    style={styles.promoInput}
+    placeholder="Enter delivery instructions here"
+    value={deliveryDescription}
+    onChangeText={setDeliveryDescription}
+    placeholderTextColor={"black"}
+  />
+
           </View>
           <View style={styles.summaryContainer}>
             <Text style={styles.summaryText}>Subtotal: ${getTotalPrice().toFixed(2)}</Text>
@@ -364,7 +387,13 @@ useEffect(() => {
             </View>
           )}
           </View>
-          <TouchableOpacity style={styles.checkoutButton} onPress={handleCheckoutSubmit} disabled={isCheckoutSubmitting}>
+
+          
+          <TouchableOpacity 
+  style={styles.checkoutButton} 
+  onPress={handleCheckoutSubmit} 
+  disabled={isCheckoutSubmitting || !deliveryDescription.trim()}  // Disable if description is empty
+>
   {isCheckoutSubmitting ? (
     <ActivityIndicator color="white" />
   ) : (
@@ -399,7 +428,7 @@ useEffect(() => {
           />
          <TextInput
   style={[styles.modalInput, password.length < 6 && styles.invalidInput]}
-  placeholder="Password"
+  placeholder="Password must be more than 6 characters"
   value={password}
   onChangeText={setPassword}
   secureTextEntry
@@ -512,6 +541,7 @@ marginBottom:20
     shadowOffset: { width: 0, height: 5 },
     shadowRadius: 10,
     elevation: 5,
+  
   },
   cartItemImage: {
     width: 80,
@@ -521,19 +551,22 @@ marginBottom:20
   cartItemDetails: {
     flex: 1,
     marginLeft: 10,
+    fontSize: 16,
+  
+    
   },
   cartItemName: {
     fontSize: 16,
     fontWeight: 'bold',
   },
   cartItemAttributes: {
-    fontSize: 14,
-    color: '#888',
+    color: 'black',
     marginVertical: 5,
+    fontSize: 20,
   },
   cartItemPrice: {
-    fontSize: 14,
-    color: '#888',
+    fontSize: 20,
+    color: 'black',
   },
   quantityContainer: {
     flexDirection: 'row',
@@ -542,14 +575,24 @@ marginBottom:20
     marginTop: 10,
   },
   quantityButton: {
-    backgroundColor: '#ddd',
-    padding: 5,
-    borderRadius: 5,
+    backgroundColor: '#3C4748',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderRadius: 25,
     marginHorizontal: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  
   quantityButtonText: {
-    fontSize: 18,
+    fontSize: 25,
     fontWeight: 'bold',
+    color:"white"
   },
   quantityText: {
     fontSize: 16,
@@ -614,7 +657,7 @@ marginBottom:20
     marginVertical: 10,
     width:"40%",
     marginHorizontal:100,
-    marginBottom:130
+    marginBottom:110
   },
   checkoutButtonText: {
     color: '#fff',

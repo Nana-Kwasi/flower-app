@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useCart } from '../CartContext/CartContext'; // Adjust the path according to your project structure
+import { useFavorites } from '../Favorite/FavourateContext';
 import { AirbnbRating } from 'react-native-ratings'; // Import the rating library
+import { Icon } from 'react-native-elements'; // Import Icon from react-native-elements
 
 const ProductDetailScreen = ({ route }) => {
   const { addToCart } = useCart();
+  const { addToFavorites } = useFavorites();
   const { product } = route.params;
   const [rating, setRating] = useState(4.5);
   const [isAdding, setIsAdding] = useState(false);
@@ -31,6 +34,9 @@ const ProductDetailScreen = ({ route }) => {
       <Image source={product.image} style={styles.image} />
       <View style={styles.detailsContainer}>
         <Text style={styles.name}>{product.name}</Text>
+        <TouchableOpacity style={styles.favoriteButton} onPress={() => addToFavorites(product)}>
+          <Icon name="heart" type="feather" color="red" size={30} />
+        </TouchableOpacity>
         <AirbnbRating
           count={5}
           defaultRating={rating}
@@ -63,63 +69,68 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 16,
     backgroundColor: '#f5f5f5',
-    alignItems: 'center',
   },
   image: {
     width: '100%',
     height: 300,
     borderRadius: 10,
-    marginBottom: 16,
-    marginTop:60
+    marginTop:70
   },
   detailsContainer: {
+    padding: 16,
     backgroundColor: '#fff',
     borderRadius: 10,
-    padding: 16,
-    width: '100%',
-    alignItems: 'center',
+    marginTop: 16,
   },
   name: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
+    marginBottom: 8,
   },
   starContainer: {
-    marginVertical: 8,
+    alignSelf: 'flex-start',
   },
   ratingText: {
     fontSize: 16,
     color: '#888',
-    marginVertical: 8,
+    marginTop: 4,
   },
   divider: {
-    width: '100%',
     height: 1,
     backgroundColor: '#ddd',
     marginVertical: 16,
   },
   description: {
     fontSize: 16,
-    color: '#555',
-    textAlign: 'center',
+    color: '#666',
     marginBottom: 16,
   },
   price: {
-    fontSize: 20,
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#000',
     marginBottom: 16,
   },
   addToCartButton: {
-    backgroundColor: '#CC6CE7',
-    borderRadius: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: '#ff6347',
+    padding: 16,
+    borderRadius: 10,
     alignItems: 'center',
+    marginBottom: 16,
   },
   addToCartText: {
     color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
+  },
+  favoriteButton: {
+    alignSelf: 'flex-end',
+    padding: 8,
   },
 });
 
 export default ProductDetailScreen;
+
+
+

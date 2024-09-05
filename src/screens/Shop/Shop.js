@@ -2,50 +2,366 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity, ScrollView, TextInput } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { useCart } from '../CartContext/CartContext';
+import { useFavorites } from '../Favorite/FavourateContext';
+
 
 const products = [
+  // Fast Food
   {
     id: '1',
-    name: 'Tulips Bouquet',
-    price: '$68.50',
-    description: 'Seven white-pinky Tulips with simple brown paper',
-    category: 'Bouquet',
-    image: require('../../../assets/pexels-pixabay-53141.jpg'),
+    name: 'Pizza',
+    price: '$12.99',
+    description: 'Delicious cheesy pizza',
+    category: 'Fast Food',
+    image: require('../../../assets/An excellent NO YEAST Pizza Dough - super quick!.jpg'),
   },
   {
     id: '2',
-    name: 'Peony Bouquet',
-    price: '$42.80',
-    description: 'Three white Peony with four pink flowers and simple brown paper',
-    category: 'Bouquet',
-    image: require('../../../assets/pexels-lynda-sanchez-825238-2300713.jpg'),
+    name: 'Burger',
+    price: '$8.55',
+    description: 'Juicy beef burger',
+    category: 'Fast Food',
+    image: require('../../../assets/Halloumi Burgers.jpg'),
   },
   {
     id: '3',
-    name: 'Rose',
-    price: '$8.55',
-    description: 'One single branch of french red Rose',
-    category: 'Branch',
-    image: require('../../../assets/pexels-pixabay-236259.jpg'),
-  },
+    name: 'Fries',
+    price: '$3.99',
+    description: 'Crispy golden fries',
+    category: 'Fast Food',
+    image: require('../../../assets/Fried Brown Rice_ With Beef, Chicken, Pork Or Shrimp! - The Woks of Life.jpg'),  },
   {
     id: '4',
-    name: 'Daisy',
-    price: '$9.15',
-    description: 'A sprig of four or five red Daisy flowers',
-    category: 'Branch',
-    image: require('../../../assets/pexels-valeriiamiller-3392982.jpg'),
+    name: 'Hot Dog',
+    price: '$5.49',
+    description: 'Grilled hot dog with ketchup and mustard',
+    category: 'Fast Food',
+    image: require('../../../assets/47 Wild-Slash-Brilliant Ways To Cook & Eat Hot Dogs.jpg'),  },
+  {
+    id: '5',
+    name: 'Chicken Nuggets',
+    price: '$6.99',
+    description: 'Crunchy chicken nuggets',
+    category: 'Fast Food',
+    image: require('../../../assets/Air Fryer Chicken Nuggets {popular recipe} _ Kitchen At Hoskins.jpg'),  },
+  {
+    id: '6',
+    name: 'Tacos',
+    price: '$9.99',
+    description: 'Soft tacos with beef filling',
+    category: 'Fast Food',
+    image: require('../../../assets/Authentic Taco de Calle [1_25 Hours].jpg'),  },
+  {
+    id: '7',
+    name: 'Grilled Cheese Sandwich',
+    price: '$4.99',
+    description: 'Melted cheese sandwich',
+    category: 'Fast Food',
+    image: require('../../../assets/40 Dinner Ideas for Tonight (+ Easy Recipes).jpg'),  },
+  {
+    id: '8',
+    name: 'Onion Rings',
+    price: '$3.99',
+    description: 'Crispy onion rings',
+    category: 'Fast Food',
+    image: require('../../../assets/Onion rings o Anelli di Cipolla NON fritti - Ricette Vegane.jpg'),  },
+  {
+    id: '9',
+    name: 'Fried Chicken',
+    price: '$10.50',
+    description: 'Crispy fried chicken',
+    category: 'Fast Food',
+    image: require('../../../assets/5 Recipes to Make This Week - Asili Glam.jpg'),  },
+  {
+    id: '10',
+    name: 'Burrito',
+    price: '$9.99',
+    description: 'Burrito with beans and beef',
+    category: 'Fast Food',
+    image: require('../../../assets/807699f1-f81e-44ba-9930-301baa7518e5.jpg'),  },
+ ,
+
+  // Local Dishes
+  {
+    id: '16',
+    name: 'Fufu',
+    price: '$14.55',
+    description: 'Fufu with goat soup',
+    category: 'Local Dishes',
+    image: require('../../../assets/fufu.jpg'),
   },
-  // Add more products with appropriate categories
+  {
+    id: '17',
+    name: 'Beans',
+    price: '$13.99',
+    description: 'Beans with kokoo',
+    category: 'Local Dishes',
+    image: require('../../../assets/Nigerian beans porridge.jpg'),  },
+  {
+    id: '18',
+    name: 'Boiled yam',
+    price: '$10.50',
+    description: 'Boiled yam with tomatoes stew',
+    category: 'Local Dishes',
+    image: require('../../../assets/yam.jpg'),  },
+  {
+    id: '19',
+    name: 'Boiled plantain',
+    price: '$12.00',
+    description: 'boild plantain with kontomire stew',
+    category: 'Local Dishes',
+    image: require('../../../assets/platain.jpg'),  },
+  {
+    id: '20',
+    name: 'Apapransa',
+    price: '$11.99',
+    description: 'Apapransa with crab',
+    category: 'Local Dishes',
+    image: require('../../../assets/apapransa.jpg'),  },
+  {
+    id: '21',
+    name: 'Waakye',
+    price: '$14.00',
+    description: 'Waakye with egg and gari',
+    category: 'Local Dishes',
+    image: require('../../../assets/waakye.jpg'),  },
+  {
+    id: '22',
+    name: 'Omotuo',
+    price: '$12.50',
+    description: 'Omotuo with groundnut soup',
+    category: 'Local Dishes',
+    image: require('../../../assets/omotuo.jpg'),  },
+  {
+    id: '23',
+    name: 'Cocoyam',
+    price: '$9.50',
+    description: 'Cocoyam with hot pepper',
+    category: 'Local Dishes',
+    image: require('../../../assets/cocoyam.jpg'),  },
+  {
+    id: '24',
+    name: 'Angwamo',
+    price: '$11.75',
+    description: 'Angwamoe with pepper and fried egg',
+    category: 'Local Dishes',
+    image: require('../../../assets/angwamo.jpg'),  },
+  {
+    id: '25',
+    name: 'Jollof',
+    price: '$15.25',
+    description: 'Jollof with fried chicken',
+    category: 'Local Dishes',
+    image: require('../../../assets/jollof.jpg'),  },
+  {
+    id: '26',
+    name: '3to',
+    price: '$10.99',
+    description: '4to with egg',
+    category: 'Local Dishes',
+    image: require('../../../assets/eto.jpg'),  },
+  {
+    id: '27',
+    name: 'Tuo zaafi',
+    price: '$12.99',
+    description: 'Tuo zaaf with ayoyo soup',
+    category: 'Local Dishes',
+    image: require('../../../assets/zaafi.jpg'),  },
+  {
+    id: '28',
+    name: 'Kenkey',
+    price: '$8.50',
+    description: 'Kenkey with hot pepper and fish',
+    category: 'Local Dishes',
+    image: require('../../../assets/ken.jpg'),  },
+    
+
+  // Dessert
+  {
+    id: '31',
+    name: 'Ice Cream',
+    price: '$5.99',
+    description: 'Tastiest Milkshake Flavors',
+    category: 'Dessert',
+    image: require('../../../assets/10 Tastiest Milkshake Flavors.jpg'),
+  },
+  {
+    id: '32',
+    name: 'Chocolate Cake',
+    price: '$6.50',
+    description: 'Rich chocolate cake with frosting',
+    category: 'Dessert',
+    image: require('../../../assets/cake.jpg'),  },
+  {
+    id: '33',
+    name: 'Cheesecake',
+    price: '$7.25',
+    description: 'Creamy cheesecake with a graham crust',
+    category: 'Dessert',
+    image: require('../../../assets/Easy Cheesecake Recipe.jpg'),  },
+  {
+    id: '34',
+    name: 'Strawberry Macaron Shells',
+    price: '$8.99',
+    description: 'Strawberry Macaron Shells',
+    category: 'Dessert',
+    image: require('../../../assets/Strawberry Macaron Shells.jpg'),  },
+  {
+    id: '35',
+    name: 'Donuts With Chocolate',
+    price: '$3.50',
+    description: 'Donuts With Chocolate Topping',
+    category: 'Dessert',
+    image: require('../../../assets/Donuts With Chocolate Topping.jpg'),  },
+  {
+    id: '36',
+    name: 'Buko Salad Drin',
+    price: '$4.25',
+    description: 'Buko Salad Drink - Foxy Folksy',
+    category: 'Dessert',
+    image: require('../../../assets/Buko Salad Drink - Foxy Folksy.jpg'),  },
+  {
+    id: '37',
+    name: 'Cookies',
+    price: '$9.25',
+    description: 'cookies with caramelized sugar',
+    category: 'Dessert',
+    image: require('../../../assets/cooks.jpg'),  },
+  {
+    id: '38',
+    name: 'Parmesan Ranch Potato Chips',
+    price: '$2.99',
+    description: 'Parmesan Ranch Potato Chips',
+    category: 'Dessert',
+    image: require('../../../assets/Parmesan Ranch Potato Chips.jpg'),  },
+  {
+    id: '39',
+    name: 'Egg Omelettes',
+    price: '$3.00',
+    description: 'JUST Egg Omelettes',
+    category: 'Dessert',
+    image: require('../../../assets/JUST Egg Omelette.jpg'),  },
+  {
+    id: '40',
+    name: 'Caramel Iced Coffee',
+    price: '$8.00',
+    description: 'Easy Homemade Caramel Iced Coffee',
+    category: 'Dessert',
+    image: require('../../../assets/Easy Homemade Caramel Iced Coffee.jpg'),  },
+  {
+    id: '41',
+    name: 'French Croissants',
+    price: '$6.75',
+    description: 'Classic French Croissants',
+    category: 'Dessert',
+    image: require('../../../assets/Classic French Croissants 101 Guide.jpg'),  },
+  
+ 
+  // Beverages
+{
+  id: '46',
+  name: 'Coca Cola',
+  price: '$2.50',
+  description: 'Chilled can of Coca Cola',
+  category: 'Beverages',
+  image: require('../../../assets/c7fdfa03-8387-4a86-a4f8-3d0f7f936ab7.jpg'),},
+{
+  id: '47',
+  name: 'Orange Juice',
+  price: '$3.99',
+  description: 'Freshly squeezed orange juice',
+  category: 'Beverages',
+  image: require('../../../assets/Cantaloupe Agua Fresca.jpg'),},
+{
+  id: '48',
+  name: 'Iced Coffee',
+  price: '$4.50',
+  description: 'Cold brew coffee with ice',
+  category: 'Beverages',
+  image: require('../../../assets/How To Make A Better-Than-Starbucks Chai Tea Latte.jpg'),},
+{
+  id: '49',
+  name: 'Tastiest Milkshake',
+  price: '$2.99',
+  description: 'Tastiest Milkshake',
+  category: 'Beverages',
+  image: require('../../../assets/10 Tastiest Milkshake Flavors.jpg'),},
+{
+  id: '50',
+  name: 'Fanta',
+  price: '$3.25',
+  description: 'Refreshing fanta',
+  category: 'Beverages',
+  image: require('../../../assets/5702b59c-4d2a-43fb-bc9c-b3cc15bd7d3e.jpg'),},
+{
+  id: '51',
+  name: 'Mango Smoothie',
+  price: '$5.50',
+  description: 'Creamy mango smoothie',
+  category: 'Beverages',
+  image: require('../../../assets/92910a92-3766-4930-969c-a29e7245dae0.jpg'),},
+{
+  id: '52',
+  name: 'Milkshake',
+  price: '$4.99',
+  description: 'Thick vanilla milkshake',
+  category: 'Beverages',
+  image: require('../../../assets/Buko Salad Drink - Foxy Folksy.jpg'),},
+{
+  id: '53',
+  name: 'Cinderella Mocktail',
+  price: '$3.75',
+  description: 'Rich and creamy hot Cinderella Mocktail',
+  category: 'Beverages',
+  image: require('../../../assets/Cinderella Mocktail.jpg'),},
+{
+  id: '54',
+  name: 'Piña Coladao',
+  price: '$2.99',
+  description: 'Classic Piña Coladao',
+  category: 'Beverages',
+  image: require('../../../assets/Classic Piña Colada.jpg'),},
+{
+  id: '55',
+  name: 'Como fazer Milk Shake',
+  price: '$4.25',
+  description: 'Como fazer Milk Shake - Fácil',
+  category: 'Beverages',
+  image: require('../../../assets/Como fazer Milk Shake - Fácil.jpg'),},
+{
+  id: '56',
+  name: 'ropical Avocado Smoothie',
+  price: '$1.00',
+  description: 'ropical Avocado Smoothie',
+  category: 'Beverages',
+  image: require('../../../assets/Double-Decker Tropical Avocado Smoothies - Cooking Classy (1).jpg'),},
+{
+  id: '57',
+  name: 'Ginger Ale',
+  price: '$2.75',
+  description: 'Grapefruit Ginger Fizz Mocktaile',
+  category: 'Beverages',
+  image: require('../../../assets/Grapefruit Ginger Fizz Mocktail.jpg'),},
+{
+  id: '58',
+  name: 'Lemonade',
+  price: '$4.50',
+  description: 'Old Fashioned Lemonade',
+  category: 'Beverages',
+  image: require('../../../assets/Old Fashioned Lemonade.jpg'),},
+
 ];
 
-const categories = ['All', 'Bouquet', 'Box', 'Branch', 'Houseplant'];
+
+const categories = ['All', 'Fast Food', 'Local Dishes', 'Dessert', 'Beverages'];
+
 
 const ShopScreen = ({ navigation }) => {
   const { addToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const { addToFavorites } = useFavorites();
 
   const filteredProducts = products.filter(product => {
     const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
@@ -66,6 +382,9 @@ const ShopScreen = ({ navigation }) => {
         <TouchableOpacity style={styles.addToCartButton} onPress={() => addToCart(item)}>
           <Text style={styles.addToCartText}>Add To Cart</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.favoriteButton} onPress={() => addToFavorites(item)}>
+            <Icon name="heart" type="feather" color="red" size={30} />
+          </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
@@ -110,6 +429,8 @@ const ShopScreen = ({ navigation }) => {
     </View>
   );
 };
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -203,6 +524,16 @@ const styles = StyleSheet.create({
   addToCartText: {
     color: 'white',
     fontSize: 13,
+  },
+  addToCartText: {
+    color: 'white',
+    fontSize: 13,
+  },
+  favoriteButton: {
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    marginTop: 5,
+    alignSelf: 'flex-end',
   },
 });
 

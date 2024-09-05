@@ -1,6 +1,6 @@
 {
   "name": "raynold-app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -9,28 +9,34 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.24.0",
+    "@expo/metro-runtime": "~3.2.1",
+    "@react-native-async-storage/async-storage": "1.23.1",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/core": "^6.4.17",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/stack": "^6.4.1",
-    "expo": "~51.0.21",
+    "date-fns": "^3.6.0",
+    "expo": "~51.0.22",
     "expo-location": "^17.0.1",
     "expo-status-bar": "~1.12.1",
     "firebase": "^9.6.11",
     "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "0.74.3",
     "react-native-activity-indicator": "^0.0.4",
     "react-native-elements": "^3.4.3",
     "react-native-geocoding": "^0.5.0",
     "react-native-geolocation-service": "^5.3.1",
-    "react-native-gesture-handler": "^2.17.1",
+    "react-native-gesture-handler": "~2.16.1",
     "react-native-ratings": "^8.1.0",
     "react-native-reanimated": "~3.10.1",
     "react-native-reanimated-carousel": "^3.5.1",
-    "react-native-safe-area-context": "^4.10.8",
-    "react-native-screens": "^3.32.0",
-    "react-native-vector-icons": "^10.1.0"
+    "react-native-safe-area-context": "4.10.5",
+    "react-native-screens": "3.31.1",
+    "react-native-vector-icons": "^10.1.0",
+    "react-native-web": "~0.19.10",
+    "react-redux": "^9.1.2",
+    "validator": "^13.12.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

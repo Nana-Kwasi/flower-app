@@ -82,6 +82,9 @@ export const CartProvider = ({ children }) => {
 
 export const useCart = () => useContext(CartContext);
 
+
+
+
 // import React, { createContext, useContext, useState } from 'react';
 
 // const CartContext = createContext();

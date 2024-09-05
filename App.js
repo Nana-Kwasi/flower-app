@@ -122,7 +122,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Icon, Badge } from 'react-native-elements';
-import { View, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import WelcomeScreen from './src/screens/welcome/welcome';
 import HomeScreen from './src/screens/Home/Home';
 import ShopScreen from './src/screens/Shop/Shop';
@@ -130,6 +130,11 @@ import CartScreen from './src/screens/Cart/Cart';
 import ProfileScreen from './src/screens/Profile/Profile';
 import { CartProvider, useCart } from './src/screens/CartContext/CartContext';
 import ProductDetailScreen from './src/screens/ProductDetails/ProductDetail';
+import FavoriteScreen from './src/screens/Favourate/Favorite';
+import { FavoriteProvider } from './src/screens/Favorite/FavourateContext';
+import { ProfileProvider } from './src/screens/ProfileContext/ProfileContext';
+import Trackingscreen from './src/screens/Tracking/Tracking';
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -155,10 +160,7 @@ function MainTabs() {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color, size }) => {
-          let iconName;
           size = 30;
-          
-
           if (route.name === 'Home') {
             return <Icon name="home" type="feather" color={color} size={size} />;
           } else if (route.name === 'Shop') {
@@ -167,6 +169,8 @@ function MainTabs() {
             return <Icon name="heart" type="feather" color={color} size={size} />;
           } else if (route.name === 'Profile') {
             return <Icon name="user" type="feather" color={color} size={size} />;
+          } else if (route.name === 'Tracking') {
+            return <Icon name="map-pin" type="feather" color={color} size={size} />;
           }
         },
         tabBarLabelStyle: styles.tabBarLabelStyle,
@@ -178,44 +182,47 @@ function MainTabs() {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Shop" component={ShopScreen} />
-      <Tab.Screen name="Cart" component={CartScreen} 
+      <Tab.Screen 
+        name="Cart" 
+        component={CartScreen} 
         options={{
-          tabBarButton: (props) => (
-            <TouchableOpacity {...props} style={styles.centralButton}>
-              <CartIconWithBadge />
-            </TouchableOpacity>
-          ),
+          tabBarIcon: () => <CartIconWithBadge />,
         }} 
       />
-      <Tab.Screen name="Wishlist" component={ShopScreen} />
+      <Tab.Screen name="Wishlist" component={FavoriteScreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Tracking" component={Trackingscreen} /> 
     </Tab.Navigator>
   );
 }
 
 const App = () => {
   return (
-    <CartProvider>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Welcome">
-          <Stack.Screen
-            name="Welcome"
-            component={WelcomeScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Main"
-            component={MainTabs}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="ProductDetail"
-            component={ProductDetailScreen}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </CartProvider>
+    <ProfileProvider>
+      <CartProvider>
+        <FavoriteProvider>
+          <NavigationContainer>
+            <Stack.Navigator initialRouteName="Welcome">
+              <Stack.Screen
+                name="Welcome"
+                component={WelcomeScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Main"
+                component={MainTabs}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ProductDetail"
+                component={ProductDetailScreen}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </FavoriteProvider>
+      </CartProvider>
+    </ProfileProvider>
   );
 };
 
@@ -245,11 +252,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   centralButton: {
-    top: -30,
+    top: -40,
     justifyContent: 'center',
     alignItems: 'center',
-    width: 70,
-    height: 70,
+    width: 90,
+    height: 90,
     borderRadius: 35,
     backgroundColor: 'white',
     borderWidth: 5,
@@ -265,4 +272,5 @@ const styles = StyleSheet.create({
    
   },
 });
+
 // 9758A9

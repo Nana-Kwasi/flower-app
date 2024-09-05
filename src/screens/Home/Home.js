@@ -7,19 +7,20 @@ import * as Location from 'expo-location';  // Import the Expo Location module
 
 const { width: screenWidth } = Dimensions.get('window');
 
-const imagePaths = {
-  diy: require('../../../assets/pexels-cottonbro-4499854.jpg'),
-  box: require('../../../assets/pexels-dmitriy-yarovoy-191560-969832.jpg'),
-  bouquet: require('../../../assets/manel-sean-v9OOmheGCkc-unsplash.jpg'),
-  branch: require('../../../assets/pexels-cottonbro-4272611.jpg'),
-  houseplants: require('../../../assets/pexels-cottonbro-4273432.jpg'),
-  wedding: require('../../../assets/pexels-cottonbro-4499866.jpg'),
-  redTulip: require('../../../assets/pexels-inspiredimages-133181.jpg'),
-  rose: require('../../../assets/pexels-pixabay-53141.jpg'),
-  daisy: require('../../../assets/pexels-lynda-sanchez-825238-2300713.jpg'),
-  bestSeller1: require('../../../assets/pexels-pixabay-236259.jpg'),
-  bestSeller2: require('../../../assets/pexels-valeriiamiller-3392982.jpg'),
-};
+  const imagePaths = {
+    pizza: require('../../../assets/An excellent NO YEAST Pizza Dough - super quick!.jpg'),
+    burger: require('../../../assets/Halloumi Burgers.jpg'),
+    pasta: require('../../../assets/23 Easy Shrimp Pasta Recipes to Try Tonight.jpg'),
+    salad: require('../../../assets/Buffalo Chicken Chopped Salad.jpg'),
+    sushi: require('../../../assets/2e5f115e-1ec1-4b10-b7d6-cb9cec973d0a.jpg'),
+    dessert: require('../../../assets/The Best Donut Shop In Every State.jpg'),
+    fries: require('../../../assets/34e3a7df-39ff-41ff-8797-794a46dd02fc.jpg'),
+    steak: require('../../../assets/34e3a7df-39ff-41ff-8797-794a46dd02fc.jpg'),
+    iceCream: require('../../../assets/Pink Hot Chocolate.jpg'),
+    bestSeller1: require('../../../assets/Pink Hot Chocolate.jpg'),
+    bestSeller2: require('../../../assets/34e3a7df-39ff-41ff-8797-794a46dd02fc.jpg'),
+  };
+
 
 const HomeScreen = () => {
   const navigation = useNavigation();
@@ -54,7 +55,7 @@ const HomeScreen = () => {
       if (geocoding && geocoding.length > 0) {
         const result = geocoding[0];
 
-        // Extract relevant information from the result
+        
         const { city, country, region } = result;
         const readableAddress = [city, region, country].filter(Boolean).join(', ');
 
@@ -91,14 +92,14 @@ const HomeScreen = () => {
     fetchLocation();
 
     return () => {
-      setLocationName(''); // Clear locationName state on component unmount
+      setLocationName(''); 
       setIsLoading(true);
     };
   }, [fetchLocation]);
 
-  // Log location and locationName
-  console.log('Location:', location);
-  console.log('Location Name:', locationName);
+ 
+  // console.log('Location:', location);
+  // console.log('Location Name:', locationName);
 
 
 
@@ -111,19 +112,24 @@ const HomeScreen = () => {
   const filteredItems = () => {
     if (!searchText) return null;
     const allItems = [
-      { id: '1', name: 'Red Tulip', price: '$21.99', image: imagePaths.redTulip, type: 'product', description: 'Beautiful red tulip.' },
-      { id: '2', name: 'Rose', price: '$8.55', image: imagePaths.rose, type: 'product', description: 'Single red rose.' },
-      { id: '3', name: 'Daisy', price: '$9.15', image: imagePaths.daisy, type: 'product', description: 'A bunch of daisies.' },
-      { id: '4', name: 'Best Seller 1', price: '$9.15', image: imagePaths.bestSeller1, type: 'product', description: 'Popular bouquet.' },
-      { id: '5', name: 'Best Seller 2', price: '$8.55', image: imagePaths.bestSeller2, type: 'product', description: 'Another popular choice.' },
+      { id: '1', name: 'Pizza', price: '$12.99', image: imagePaths.pizza, type: 'product', description: 'Delicious cheesy pizza.' },
+      { id: '2', name: 'Burger', price: '$8.55', image: imagePaths.burger, type: 'product', description: 'Juicy beef burger.' },
+      { id: '3', name: 'Pasta', price: '$9.15', image: imagePaths.pasta, type: 'product', description: 'Creamy Alfredo pasta.' },
+      { id: '4', name: 'Sushi', price: '$14.55', image: imagePaths.sushi, type: 'product', description: 'Fresh sushi rolls.' },
+      { id: '5', name: 'Ice Cream', price: '$5.99', image: imagePaths.iceCream, type: 'product', description: 'Cold and creamy ice cream.' },
     ];
     return allItems.filter(item => item.name.toLowerCase().includes(searchText.toLowerCase()));
   };
+  
+  const handleCategoryPress = (category) => {
+    navigation.navigate('Shop', { category });
+  };
+  
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.header}>
-          <Text style={styles.greeting}>Hello Nana!</Text>
+          <Text style={styles.greeting}>Hello Samuel !</Text>
           {searchVisible ? (
             <View style={styles.searchContainer}>
               <TextInput
@@ -168,17 +174,17 @@ const HomeScreen = () => {
           <>
             <View style={styles.diyContainer}>
               <Image
-                source={imagePaths.diy}
+                source={imagePaths.fries}
                 style={styles.diyImage}
               />
               <View style={styles.diyTextContainer}>
-                <Text style={styles.diyTitle}>Model Flower Bouquets</Text>
-                <Text style={styles.diySubtitle}>Design Your Own Custom Bouquet</Text>
+                <Text style={styles.diyTitle}>Local Restaurant </Text>
+                <Text style={styles.diySubtitle}>Order something special</Text>
                 <Text style={styles.diyDescription}>
-                  Choose any color, any model, and any flower to create your favorite.
+                  Search for any food and get it delivered at your door post.
                 </Text>
                 <TouchableOpacity style={styles.diyButton}>
-                  <Text style={styles.diyButtonText}>Make your own</Text>
+                  <Text style={styles.diyButtonText}>Place your order</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -186,7 +192,7 @@ const HomeScreen = () => {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Categories</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.categoryScroll}>
-                {['box', 'bouquet', 'branch', 'houseplants', 'wedding'].map((category, index) => (
+              {['pizza', 'burger', 'pasta', 'salad', 'sushi', 'dessert'].map((category, index) => (
                   <TouchableOpacity key={index} style={styles.categoryContainer} onPress={() => handleCategoryPress(category)}>
                     <Image
                       source={imagePaths[category]}
@@ -201,50 +207,49 @@ const HomeScreen = () => {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Fresh Blooms</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.productScroll}>
-                {[
-                  { id: '1', name: 'Red Tulip', price: '$21.99', image: imagePaths.redTulip, description: 'Beautiful red tulip.' },
-                  { id: '2', name: 'Rose', price: '$8.55', image: imagePaths.rose, description: 'Single red rose.' },
-                  { id: '3', name: 'Daisy', price: '$9.15', image: imagePaths.daisy, description: 'A bunch of daisies.' },
-                ].map((product, index) => (
-                  <View key={index} style={styles.productContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', { product })}>
-                      <Image
-                        source={product.image}
-                        style={styles.productImage}
-                      />
-                    </TouchableOpacity>
-                    <Text style={styles.productName}>{product.name}</Text>
-                    <Text style={styles.productPrice}>{product.price}</Text>
-                    <TouchableOpacity style={styles.addButton} onPress={() => addToCart(product)}>
-                      <Icon name="add" size={24} color="#000" />
-                    </TouchableOpacity>
-                  </View>
-                ))}
+              {[
+    { id: '1', name: 'Pizza', price: '$12.99', image: imagePaths.pizza, description: 'Delicious cheesy pizza.' },
+    { id: '2', name: 'Burger', price: '$8.55', image: imagePaths.burger, description: 'Juicy beef burger.' },
+    { id: '3', name: 'Pasta', price: '$9.15', image: imagePaths.pasta, description: 'Creamy Alfredo pasta.' },
+  ].map((product, index) => (
+    <View key={index} style={styles.productContainer}>
+      <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', { product })}>
+        <Image
+          source={product.image}
+          style={styles.productImage}
+        />
+      </TouchableOpacity>
+      <Text style={styles.productName}>{product.name}</Text>
+      <Text style={styles.productPrice}>{product.price}</Text>
+      <TouchableOpacity style={styles.addButton} onPress={() => addToCart(product)}>
+        <Icon name="add" size={24} color="#000" />
+      </TouchableOpacity>
+    </View>
+  ))}
               </ScrollView>
             </View>
 
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Bestsellers</Text>
               <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.productScroll}>
-                {[
-                  { id: '4', name: 'Best Seller 1', price: '$8.55', image: imagePaths.bestSeller1, description: 'Popular bouquet.' },
-                  { id: '5', name: 'Best Seller 2', price: '$8.55',image: imagePaths.bestSeller2, description: 'Another popular choice.' },
-                ].map((product, index) => (
-                  <View key={index} style={styles.productContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', { product })}>
-                      <Image
-                        source={product.image}
-                        style={styles.productImage}
-                      />
-                    </TouchableOpacity>
-                    <Text style={styles.productName}>{product.name}</Text>
-                    <Text style={styles.productPrice}>{product.price}</Text>
-
-                    <TouchableOpacity style={styles.addButton} onPress={() => addToCart(product)}>
-                      <Icon name="add" size={24} color="#000" />
-                    </TouchableOpacity>
-                  </View>
-                ))}
+              {[
+    { id: '4', name: 'Sushi', price: '$14.55', image: imagePaths.sushi, description: 'Fresh sushi rolls.' },
+    { id: '5', name: 'Ice Cream', price: '$5.99', image: imagePaths.iceCream, description: 'Cold and creamy ice cream.' },
+  ].map((product, index) => (
+    <View key={index} style={styles.productContainer}>
+      <TouchableOpacity onPress={() => navigation.navigate('ProductDetail', { product })}>
+        <Image
+          source={product.image}
+          style={styles.productImage}
+        />
+      </TouchableOpacity>
+      <Text style={styles.productName}>{product.name}</Text>
+      <Text style={styles.productPrice}>{product.price}</Text>
+      <TouchableOpacity style={styles.addButton} onPress={() => addToCart(product)}>
+        <Icon name="add" size={24} color="#000" />
+      </TouchableOpacity>
+    </View>
+  ))}
               </ScrollView>
             </View>
           </>
@@ -346,8 +351,8 @@ const styles = StyleSheet.create({
     marginRight: 20,
   },
   categoryImage: {
-    width: 60,
-    height: 60,
+    width: 90,
+    height: 90,
     borderRadius: 30,
   },
   categoryText: {
